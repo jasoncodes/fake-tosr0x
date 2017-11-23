@@ -10,8 +10,23 @@ logger.level = Logger::INFO
 server = TCPServer.new 2000
 logger.info "Listening on #{server.local_address.inspect_sockaddr}"
 
-temperature = 23.5
+temperature = 23.4
 relays = [false] * 4
+
+Thread.new do
+  Thread.current.abort_on_exception = true
+
+  loop do
+    2.times do
+      sleep 5
+      temperature += 0.1
+    end
+    2.times do
+      sleep 5
+      temperature -= 0.1
+    end
+  end
+end
 
 loop do
   conn = begin
